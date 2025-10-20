@@ -5,9 +5,16 @@ paises_de_prueba = [
     {'nombre': 'Alemania', 'poblacion': 83149300, 'superficie': 357022, 'continente': 'Europa'}
 ]
 
+for pais in paises_de_prueba: #Conversion de str a int 
+    try:
+        pais['poblacion'] = int(pais['poblacion'])
+        pais['superficie'] = int(pais['superficie'])
+    except ValueError:
+        print(f"Error al convertir datos numéricos en {pais['nombre']}")
+
 #Ordenamiento de paises 
 def ordenamiento(paises):
-    valido = ["nombre", "poblacion", "superficie"] #unicas opciones validas a ingresar
+    valido = ["nombre", "poblacion", "superficie"] #unicas opciones validas para ingresar
 
     ordenar_por = input("Desea ordenar los paises por:'Nombre', 'Poblacion' o 'Superficie': ").lower()
     if ordenar_por not in valido:
@@ -40,8 +47,8 @@ def ordenamiento(paises):
 
 
 #Estadisticas
-def estadisticas(paises):
-        print("\nEstadisticas a mostrar: ")
+def estadisticas(paises): # Menu de estadisticas.
+        print("\nQue estadisticas desea ver? ")
         print("1. Paises con mayor y menor poblacion.")
         print("2. Promedio de poblacion.")
         print("3. Promedio de superficie.")
@@ -56,8 +63,8 @@ def estadisticas(paises):
         elif eleccion == "1": #Pais con mayor y menor poblacion
             mayor_poblacion = max(paises, key=lambda pais: pais['poblacion'])
             menor_poblacion = min(paises, key=lambda pais: pais['poblacion'])
-            print(f"\nEl pais con mayor poblacion es:{mayor_poblacion['nombre']}({mayor_poblacion['poblacion']})")
-            print(f"El pais con menor poblacion es:{menor_poblacion['nombre']}({menor_poblacion['poblacion']})\n")
+            print(f"\nEl pais con mayor poblacion es: {mayor_poblacion['nombre']} con una poblacion de ({mayor_poblacion['poblacion']})")
+            print(f"El pais con menor poblacion es: {menor_poblacion['nombre']} con una poblacion de ({menor_poblacion['poblacion']})\n")
         elif eleccion == "2": #Promedio de poblacion
             total = 0
             for pais in paises:
@@ -74,6 +81,7 @@ def estadisticas(paises):
             print("\nEl promedio de superficie del total de paises es:", promedio,"\n")
         elif eleccion == "4": #Cantidad de paises por continente
             contador = {} #Diccionario para guardar continente y la cantidad de paises.
+            print("Paises por continente: ")
             for pais in paises:
                 continente = pais['continente']
                 if continente in contador: 
@@ -81,7 +89,7 @@ def estadisticas(paises):
                 else:
                     contador[continente] = 1
             for continente, cantidad in contador.items():
-                print(f"{continente}: {cantidad} países")
+                print(f"{continente}: {cantidad} paises")
               
 #Programa principal (MENU)
  
@@ -121,7 +129,7 @@ def menu_opciones():
             
                     else:
                         valor_orden  = pais[ordenado_por] #esto contiene el nombre del pais y el valor del orden.
-                        print(f" - {pais['nombre']} su {ordenado_por.capitalize()}: {valor_orden}")
+                        print(f" - {pais['nombre']}, {ordenado_por.capitalize()}: {valor_orden}")
         elif opcion == "4":
             estadisticas(paises_de_prueba)
         elif opcion == "0":
@@ -129,6 +137,11 @@ def menu_opciones():
             break
         else: 
             print("Dato ingresado invalido.")
+
+for pais in paises_de_prueba: # Conversion de str a int para población y superficie
+    pais['poblacion'] = int(pais['poblacion'])
+    pais['superficie'] = int(pais['superficie'])
+
 
 menu_opciones()
 
