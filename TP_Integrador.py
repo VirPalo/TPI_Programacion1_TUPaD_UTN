@@ -22,6 +22,82 @@ def carga_archivo():
 # OPCIÓN 1: Función para agregar un país ----------
 
 
+#---Funcion para solo numero positivo
+def num_positivo(mensaje):
+    while True: 
+        try: #permite solo ingresar numeros
+            poblacion_pais = int(input(mensaje))
+            if poblacion_pais <= 0: #solo permite ingresar nuemeros mayores a 0.
+                print("Debe ingresar un numero mayor a 0")
+                continue #vuelve al inici del while.
+            return poblacion_pais #si es valido
+        except ValueError:
+            print("Dato ingresado invalido.")
+
+#---Funcion solo para continentes validos---
+def continente_valido(nombre_pais):
+    continentes_validos = ["america", "europa", "asia", "africa", "oceania", "antartida"]
+
+    while True:
+        print(f"A qué continente pertenece {nombre_pais.capitalize()}?")
+        print("\nAsia")
+        print("Africa")
+        print("America")
+        print("Europa")
+        print("Oceania")
+        print("Antartida")
+        continente_pais = input("\nContinente: ").lower()
+
+        if continente_pais not in continentes_validos:
+            print("\nDebe ingresar un continente válido. Intente de nuevo.")
+            continue
+        return continente_pais
+
+def agregar():
+    while True:
+        nombre_pais = input("\nIngrese el nombre del pais a agregar: ").strip().lower()
+        # Si el usuario no ingresa nada
+        if nombre_pais == "":
+            print("Debe ingresar un nombre. Intente nuevamente.")
+            continue
+    
+        valido = True
+        for letras in nombre_pais:
+            if not (letras.isalpha() or letras == " "):
+                valido = False
+                break
+        
+        if not valido:
+            print("Dato ingresado invalido")
+            continue
+
+        for pais in paises: #verifica que el pais a agregar no se encuentre ya en la lista.
+            if pais['nombre'] == nombre_pais:
+                print (f"\nEl pais {nombre_pais.capitalize()} ya se encuentra en la lista de paises.")
+                return 
+        #si el pais no se encuentra pide los demas datos
+        break #su cumple las validaciones sale del bucle 
+
+    poblacion_pais = num_positivo("Ingrese la población del país agregado: ")
+    superficie_pais = num_positivo("Ingrese la superficie del país agregado: ")
+    continente_pais = continente_valido(nombre_pais)
+
+
+    pais_nuevo = {
+    'nombre' : nombre_pais,
+    'poblacion' : poblacion_pais,
+    'superficie' : superficie_pais,
+    'continente' : continente_pais
+     }
+    paises.append(pais_nuevo) 
+    print("\nPais agregado con exito!")
+    print(f"Pais: {nombre_pais.capitalize()}, Poblacion: {poblacion_pais}, Superficie: {superficie_pais}, Continente: {continente_pais.capitalize()}")
+
+
+    
+
+
+
 # OPCIÓN 2: Función para modificar población y superficie de un país ----------
 
 
@@ -70,7 +146,7 @@ def busqueda():
     else:
         print('\nRespuesta inválida.')
         
-# Función para mostrar la información de un país       
+# Función para mostrar la información de un país
 def mostrar_un_pais(pais):
     print('\n--- Información del país ---')
     print(f'Nombre: {pais['nombre']}')
@@ -201,85 +277,105 @@ def filtrar_poblacion():
     else:
         print('No existen países de la lista en ese rango.')
      
-#------------
-
-#for pais in paises: #Conversion de str a int 
- #   try:
-  #      pais['poblacion'] = int(pais['poblacion'])
-   #     pais['superficie'] = int(pais['superficie'])
-    #except ValueError:
-     #   print(f"Error al convertir datos numéricos en {pais['nombre']}")
 
 # OPCIÓN 5: Ordenamiento de paises ----------
 
-def ordenamiento(paises):
-    valido = ["nombre", "poblacion", "superficie"] #unicas opciones validas para ingresar
+def ordenamiento():
+    
+    while True:
+            print("\n-- Menu para ordenar--")
+            print("\n1. Ordenar por Nombre")
+            print("2. Ordenar por Poblacion")
+            print("3. Ordenar por Superfice")
+            print("0. Salir")
 
-    ordenar_por = input("Desea ordenar los paises por:'Nombre', 'Poblacion' o 'Superficie': ").lower()
-    if ordenar_por not in valido:
-        print("Dato ingresado invalido.")
-        return paises, "error"
+            ordenar_por = input("Ingrese opcion de ordenamiento: ")
+        
+            if ordenar_por == "0":
+                print("Regresa al menu principal")
+                break
+            tipo_orden = ""
 
-    #Ordenados alfabeticamente.
-    elif ordenar_por == "nombre":
-        paises_ordenados = sorted(paises, key=lambda pais: pais['nombre'])
-     #Ordenados po poblacion.
-    elif ordenar_por == "poblacion":
-        paises_ordenados = sorted(paises, key=lambda pais: pais['poblacion'])
-    #Ordenados por superficie.
-    elif ordenar_por == "superficie":
-        asc_o_desc = input("\nDe forma Ascendente o Descendente? \n") 
+            #Ordenados alfabeticamente.
+            if ordenar_por == "1":
+                eleccion = "nombre" #clave para acceder al diccionario.
+                paises_ordenados = sorted(paises, key=lambda pais: pais['nombre'])
+                #Ordenados po poblacion.
+            elif ordenar_por == "2":
+                eleccion = "poblacion" #clave para acceder al diccionario.
+                paises_ordenados = sorted(paises, key=lambda pais: pais['poblacion'])
+            #Ordenados por superficie.
+            elif ordenar_por == "3":
+                eleccion = "superficie" #clave para acceder al diccionario.
+                asc_o_desc = input("\nDe forma Ascendente o Descendente? \n") 
 
-        if asc_o_desc == "ascendente":
-            paises_ordenados= sorted(paises, key=lambda pais: pais['superficie'])
+                if asc_o_desc == "ascendente":
+                    tipo_orden = "de manera ascendente"
+                    paises_ordenados= sorted(paises, key=lambda pais: pais['superficie'])
 
-        elif asc_o_desc == "descendente":
-            paises_ordenados = sorted(paises, key=lambda pais: pais['superficie'], reverse = True)
+                elif asc_o_desc == "descendente":
+                    tipo_orden = "de manera descendente"
+                    paises_ordenados = sorted(paises, key=lambda pais: pais['superficie'], reverse = True)
 
-        else:  #Si la respuesta es invalida.
-            print("Respuesta invalida")
-            return paises, "error" #Si se escribe mal ascendente o descendente.
-   
-    return paises_ordenados, ordenar_por
+                else:  #Si la respuesta es invalida.
+                    print("Respuesta invalida") #Si se escribe mal ascendente o descendente.
+            else:
+                print("Dato ingresado invalido.")
+                continue #vuelve al inicio del while
+            #impresion
+            print(f"\nLista de paises ordenada por {eleccion.capitalize()} {tipo_orden}:")
+            for pais in paises_ordenados:
+                if ordenar_por == "1":
+                    print(f" - {pais['nombre']}")
+                elif ordenar_por == "2":
+                    valor_orden = pais[eleccion]
+                    print(f" - {pais['nombre']}, {eleccion.capitalize()}: {valor_orden} habitantes.")
+                elif ordenar_por == "3":
+                    valor_orden = pais[eleccion]
+                    print(f" - {pais['nombre']}, {eleccion.capitalize()}: {valor_orden} km².")
 
 
 # OPCIÓN 6: Estadisticas ----------
+#Funcion para calcular la media
+def media(lista):
+    if len(lista) == 0:
+        return 0
+    return sum(lista) / len(lista)
 
 def estadisticas(paises): # Menu de estadisticas.
+    while True:
         print("\nQue estadisticas desea ver? ")
         print("1. Paises con mayor y menor poblacion.")
         print("2. Promedio de poblacion.")
         print("3. Promedio de superficie.")
         print("4. Cantidad de paises por continente.")
-
-        eleccion= input("Ingrese el numero de la opcion a realizar: ")
-        valido = ["1", "2","3","4"]
-
-        if eleccion not in valido:
-            print ("Dato ingresado invalido..\n")
+        print("0. Salir")
+        
+        eleccion= input("\nIngrese el numero de la opcion a realizar: ")
+        
+        if eleccion == "0":
+            print("Regresa al menu principal.")
+            break
             
         elif eleccion == "1": #Pais con mayor y menor poblacion
             mayor_poblacion = max(paises, key=lambda pais: pais['poblacion'])
             menor_poblacion = min(paises, key=lambda pais: pais['poblacion'])
             print(f"\nEl pais con mayor poblacion es: {mayor_poblacion['nombre']} con una poblacion de ({mayor_poblacion['poblacion']})")
             print(f"El pais con menor poblacion es: {menor_poblacion['nombre']} con una poblacion de ({menor_poblacion['poblacion']})\n")
+        
         elif eleccion == "2": #Promedio de poblacion
-            total = 0
-            for pais in paises:
-               buscador = pais['poblacion'] #Entra a la poblacion de cada pais
-               total += buscador #suma cada dato dentro de poblacion.
-            promedio = total / len(paises)
-            print("\nEl promedio de poblacion del total de paises es:", promedio, "\n")
+            poblaciones = [pais['poblacion'] for pais in paises]
+            promedio = media(poblaciones)
+            print("\nEl promedio de población del total de países es:", (promedio), "\n")
+        
         elif eleccion == "3": #Promedio de superficie
-            total = 0
-            for pais in paises:
-                buscador = pais['superficie']
-                total += buscador
-            promedio = total / len(paises)
-            print("\nEl promedio de superficie del total de paises es:", promedio,"\n")
+            superficies = [pais['superficie'] for pais in paises]
+            promedio = media(superficies)
+            print("\nEl promedio de superficie del total de países es:", (promedio), "\n")
+        
         elif eleccion == "4": #Cantidad de paises por continente
             contador = {} #Diccionario para guardar continente y la cantidad de paises.
-            print("Paises por continente: ")
+            print("\nPaises por continente: \n")
             for pais in paises:
                 continente = pais['continente']
                 if continente in contador: 
@@ -288,15 +384,17 @@ def estadisticas(paises): # Menu de estadisticas.
                     contador[continente] = 1
             for continente, cantidad in contador.items():
                 print(f"{continente}: {cantidad} paises")
-              
+        else: 
+            print("Dato ingresado invalido")
+            continue
 # Programa principal (MENU) -------------------------------
 
 # Primero se guarda el archivo en una lista de diccionarios.
 paises = carga_archivo()
 
 def menu():
-    print("\n MENU ")
-    print("1. Agregar un país.")
+    print("\n MENU PRINCIPAL ")
+    print("\n1. Agregar un país.")
     print("2. Actualizar población y superficie de un país.")
     print("3. Buscar paises.")  
     print("4. Filtrar paises.")
@@ -305,18 +403,17 @@ def menu():
     print("O. Salir del menu.")
 
 def menu_opciones():
-      paises_actualizados = list(paises) 
-    
+      
       while True: #Para que el menu se repita hasta que opcion sea 0.
         menu()
 
         opcion = (input("Ingrese el numero de la opcion de a realizar: "))
-        if opcion not in ["0","1", "2", "3", "4"]:
+        if opcion not in ["0","1", "2", "3", "4","5","6"]:
             print ("Debe ingresar un dato valido.")
             continue
         
         if opcion == "1":
-            pass     
+            agregar()     
 
         elif opcion == "2":
             pass
@@ -328,19 +425,7 @@ def menu_opciones():
             menu_filtrar_paises()
             
         elif opcion == "5": 
-            paises_ordenados, ordenado_por = ordenamiento(paises_actualizados) #La primera variable contiene la lista ordenada y la segunda el tipo del orden.
-
-            if ordenado_por != "error": #verifica si hay error y continua con el programa.
-                paises_actualizados = paises_ordenados
-                print(f"\nLista de países ordenada por {ordenado_por}")
-
-                for pais in paises_ordenados:
-                    if ordenado_por == "nombre":
-                        print(f" - {pais['nombre']}") #Para que el nombre del pais solo se repita una vez.
-            
-                    else:
-                        valor_orden  = pais[ordenado_por] #esto contiene el nombre del pais y el valor del orden.
-                        print(f" - {pais['nombre']}, {ordenado_por.capitalize()}: {valor_orden}")
+            ordenamiento()
                         
         elif opcion == "6":
             estadisticas(paises)
@@ -352,8 +437,6 @@ def menu_opciones():
         else: 
             print("Dato ingresado inválido.")
 
-#for pais in paises: # Conversion de str a int para población y superficie
-    #pais['poblacion'] = int(pais['poblacion'])
-    #pais['superficie'] = int(pais['superficie'])
+
 
 menu_opciones()
