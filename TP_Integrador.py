@@ -320,13 +320,13 @@ def menu_opciones():
 
         elif opcion == "2":
             pass
-            
-        elif opcion == "3":
-            busqueda()
-    
-        elif opcion == "4":
-            menu_filtrar_paises()
-            
+        
+    elif opcion == "3":
+        busqueda()
+
+    elif opcion == "4":
+        menu_filtrar_paises()
+        
         elif opcion == "5": 
             paises_ordenados, ordenado_por = ordenamiento(paises_actualizados) #La primera variable contiene la lista ordenada y la segunda el tipo del orden.
 
