@@ -417,13 +417,13 @@ def menu_opciones():
 
         elif opcion == "2":
             pass
-            
-        elif opcion == "3":
-            busqueda()
-    
-        elif opcion == "4":
-            menu_filtrar_paises()
-            
+        
+    elif opcion == "3":
+        busqueda()
+
+    elif opcion == "4":
+        menu_filtrar_paises()
+        
         elif opcion == "5": 
             ordenamiento()
                         
