@@ -1,23 +1,33 @@
-'''
-paises_de_prueba = [
-    {'nombre': 'Argentina', 'poblacion': 45376763, 'superficie': 2780400, 'continente': 'America'},
-    {'nombre': 'Japón', 'poblacion': 125800000, 'superficie': 377975, 'continente': 'Asia'},
-    {'nombre': 'Brasil', 'poblacion': 213993437, 'superficie': 8515767, 'continente': 'America'},
-    {'nombre': 'Alemania', 'poblacion': 83149300, 'superficie': 357022, 'continente': 'Europa'}
-]
-'''
+import csv
 
-# Funcion de carga del archivo paises.csv
+NOMBRE_ARCHIVO = 'paises.csv'
+
+# Funcion auxiliar de carga del archivo paises.csv
 def carga_archivo():
     paises = []
-    with open('paises.csv', 'r', encoding='latin-1') as archivo:
-        lineas = archivo.readlines()
-        for i in range(1, len(lineas)): # Salto el encabezado del .csv
-            datos = lineas[i].strip().split(',')
-            pais = {'nombre': datos[0], 'poblacion': int(datos[1]), 'superficie': int(datos[2]), 'continente': datos[3]}
+    with open(NOMBRE_ARCHIVO, newline='', encoding='utf-8') as archivo:
+        lector = csv.DictReader(archivo)
+        for linea in lector: # Salto el encabezado del .csv
+            pais = {'nombre': linea['nombre'], 'poblacion': int(linea['poblacion']), 'superficie': int(linea['superficie']), 'continente': linea['continente']}
             paises.append(pais)
             
-        return paises
+    return paises
+    
+# Función auxiliar para agregar pais (un diccionario) al archivo csv
+def agregar_pais(nuevo_pais):
+    with open(NOMBRE_ARCHIVO, 'a', newline='', encoding='utf-8') as archivo:
+        escritor = csv.DictWriter(archivo, fieldnames=['nombre', 'poblacion', 'superficie', 'continente'])
+        escritor.writerow(nuevo_pais)
+
+# Funcion auxiliar para modificar el archivo csv
+def modificar_pais(paises):
+    with open(NOMBRE_ARCHIVO, 'w', newline='', encoding='utf-8') as archivo:
+        escritor = csv.DictWriter(archivo, fieldnames=['nombre', 'poblacion', 'superficie', 'continente'])
+        escritor.writeheader()
+        escritor.writerows(paises)
+
+
+
 
 # OPCIÓN 1: Función para agregar un país ----------
 
@@ -94,22 +104,64 @@ def agregar():
     print(f"Pais: {nombre_pais.capitalize()}, Poblacion: {poblacion_pais}, Superficie: {superficie_pais}, Continente: {continente_pais.capitalize()}")
 
 
+  
+
+
+# OPCIÓN 2: Función para actualizar población y superficie de un país ----------
+def actualizar():
+    # Cargo el archivo
+    paises = carga_archivo()
     
+    # Primero busco el país
+    print('\nPara actualizar datos, se busca el país que desea modificar.')
+    pais_a_modificar = busqueda()
+    
+    # Modifico si se encontró
+    if pais_a_modificar:
+        
+        # Pido nueva superficie
+        nueva_superficie = input('\nIngrese la nueva superficie: ')
+        
+        while nueva_superficie.isdigit() == False: # Valido superficie positiva
+            print('\nLa superficie debe ser un entero positivo. Intente nuevamente')
+            nueva_superficie = input('\nIngrese la nueva superficie: ')
+            
+        # Pido nueva poblacion
+        nueva_poblacion = input('\nIngrese la nueva población: ')
+        
+        while nueva_poblacion.isdigit() == False: # Valido poblacion positiva
+            print('\nLa población debe ser un entero positivo. Intente nuevamente')
+            nueva_poblacion = input('\nIngrese la nueva población: ')
+        
+        # Modifico la lista paises 
+        for pais in paises:
+            if pais_a_modificar['nombre'].lower() == pais['nombre'].lower():
+                pais['superficie'] = int(nueva_superficie)
+                pais['poblacion'] = int(nueva_poblacion)
+                
+                mostrar_un_pais(pais)
+                print('Operación realizada con éxito.')
+                
+                break
+        
+        # Actualizo .csv    
+        modificar_pais(paises)
+        
 
-
-
-# OPCIÓN 2: Función para modificar población y superficie de un país ----------
 
 
 # OPCIÓN 3: Función para buscar paises ----------
 def busqueda():
+    # Cargo el archivo
+    paises = carga_archivo()
+    
     pais_buscado = input('Ingrese el nombre del país que está buscando: ').strip()
     
     # Coincidencia exacta
     for pais in paises:
         if pais_buscado.lower() == pais['nombre'].lower():
             mostrar_un_pais(pais)
-            return
+            return pais
             
     # Coincidencia parcial
     coincidencias_parciales = []
@@ -134,7 +186,7 @@ def busqueda():
             if nombre_correcto.lower() == pais['nombre'].lower():
                 mostrar_un_pais(pais)
                 encontrado = True
-                return
+                return pais
         
         if not encontrado: # Verifico si el nombre correcto ingresado no esta en la lista
             print(f'\nEl país {pais_buscado} no se encuentra en la lista.')
@@ -153,6 +205,9 @@ def mostrar_un_pais(pais):
     print(f'Población: {pais['poblacion']:,} habitantes')
     print(f'Superficie: {pais['superficie']:,} km²')
     print(f'Continente: {pais['continente']}')
+    
+    
+
 
 # OPCIÓN 4: Función para filtrar paises por Continente, por Rango de superficie, por Rango de poblacion ----------
 def menu_filtrar_paises():
@@ -165,36 +220,32 @@ def menu_filtrar_paises():
         print('0. Salir')
         
         opc = input('\nIngrese la opción de filtrado: ')
-    
-        # Opción para salir del menú de filtrado
-        if opc == '0':
-            print('Regresa al menú principal.')
-            break
-             
-        # Filtrar por continente
-        elif opc == '1':
-            filtrar_continente()
-            
-        # Filtrar por Rango de Superficie
-        elif opc == '2':
-            filtrar_superficie()
-     
-        # Filtrar por Rango de Poblacion
-        elif opc == '3':
-            filtrar_poblacion()
-        
-        # Opción incorrecta
-        else:
-            print('\nOpción inválida. Intente de nuevo.')
 
-# Función para mostrar todos los países de una lista 
+        match opc:
+            case '0': # Opción para salir del menú de filtrado
+                print('Regresa al menú principal.')
+                break
+             
+            case '1': # Filtrar por continente
+                filtrar_continente()
+                
+            case '2': # Filtrar por Rango de Superficie
+                filtrar_superficie()
+                
+            case '3': # Filtrar por Rango de Poblacion
+                filtrar_poblacion()
+            
+            case _: # Opción incorrecta
+                print('\nOpción inválida. Intente de nuevo.')
+
+# Función auxiliar para mostrar todos los países de una lista 
 def mostrar_paises(paises):
     print('\n--- Información de los países: ---\n')
     for pais in paises:
         print(f'Nombre: {pais['nombre']} |Población: {pais['poblacion']:,} habitantes |Superficie: {pais['superficie']:,} km² |Continente: {pais['continente']}')
 
-# Función para mostrar todos los continentes de la lista original
-def mostrar_continentes():
+# Función auxiliar para mostrar todos los continentes de la lista original
+def mostrar_continentes(paises):
     continentes = []
     for pais in paises:
         if pais['continente'] not in continentes:
@@ -203,10 +254,13 @@ def mostrar_continentes():
     print('\nLos continentes en la lista son: ')
     for i in range(len(continentes)):
         print(f'- {continentes[i]}')
+        
 
 # Función para filtrar por continente
 def filtrar_continente():
-    mostrar_continentes() # Llamada a la función p/mostrar los continentes
+    paises = carga_archivo()
+    
+    mostrar_continentes(paises) # Llamada a la función p/mostrar los continentes
     continente = input('\nIngrese el continente para filtrar: ').strip()
     
     paises_filtrados = []
@@ -236,6 +290,8 @@ def filtrar_superficie():
         
         else:
             break
+        
+    paises = carga_archivo()
     
     # Filtrar
     paises_filtrados = []
@@ -265,6 +321,8 @@ def filtrar_poblacion():
         
         else:
             break
+        
+    paises = carga_archivo()
     
     # Filtrar
     paises_filtrados = []
@@ -416,13 +474,14 @@ def menu_opciones():
             agregar()     
 
         elif opcion == "2":
-            pass
-        
-    elif opcion == "3":
-        busqueda()
-
-    elif opcion == "4":
-        menu_filtrar_paises()
+            actualizar()
+            
+        elif opcion == "3":
+            busqueda()
+    
+        elif opcion == "4":
+            menu_filtrar_paises()
+     
         
         elif opcion == "5": 
             ordenamiento()
