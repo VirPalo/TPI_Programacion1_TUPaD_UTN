@@ -5,8 +5,9 @@ Alumnas:
 Paloma, Virginia - Comisión 10
 Salazar, Fiorella - Comisión 12
 
-Docente titular:
-- Ariel Enferrel
+Docente titular: 
+  - Ariel Enferrel
+
 Docentes tutores:
 - Martina Zabala (comisión 10)
 - Franco Gonzalez (comisión 12)
@@ -31,5 +32,6 @@ El programa presenta un menú principal con las siguientes opciones:
 
 Al momento de ejecución del programa, lo primero que se visualiza es el menú principal. Se le pide al usuario que ingrese una opción (validando lo ingresado). Luego, dentro de cada opción se va guiando al usuario para llevar a cabo la tarea que desea realizar. Por ejemplo, se elije la opción 4 de filtrar países e inmediatamente, aparece un segundo menú para elegir el tipo de filtrado: por continente, por rango de superficie y por rango de población. Siguiendo con el ejemplo, elegimos filtrar por continente. Entonces, el programa muestra los continentes y le pide al usuario que ingrese el que desea y, a continuación, se muestra una lista de paises eprtenecientes al continente elegido, con su respectiva información.
 Es necesario destacar que, en las opciones donde se modifica la lista, se modifica también el archivo .csv para lograr la persistencia deseada.
+
 El trabajo se realizó en equipo utilizando GitHub como herramienta.
 
