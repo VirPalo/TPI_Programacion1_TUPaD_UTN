@@ -31,7 +31,6 @@ def modificar_pais(paises):
 
 # OPCIÓN 1: Función para agregar un país ----------
 
-
 #---Funcion para solo numero positivo
 def num_positivo(mensaje):
     while True: 
@@ -64,6 +63,9 @@ def continente_valido(nombre_pais):
         return continente_pais
 
 def agregar():
+    # Me traigo el archivo csv actualizado
+    paises = carga_archivo()
+    
     while True:
         nombre_pais = input("\nIngrese el nombre del pais a agregar: ").strip().lower()
         # Si el usuario no ingresa nada
@@ -82,7 +84,7 @@ def agregar():
             continue
 
         for pais in paises: #verifica que el pais a agregar no se encuentre ya en la lista.
-            if pais['nombre'] == nombre_pais:
+            if pais['nombre'].lower() == nombre_pais.lower():
                 print (f"\nEl pais {nombre_pais.capitalize()} ya se encuentra en la lista de paises.")
                 return 
         #si el pais no se encuentra pide los demas datos
@@ -103,9 +105,10 @@ def agregar():
     print("\nPais agregado con exito!")
     print(f"Pais: {nombre_pais.capitalize()}, Poblacion: {poblacion_pais}, Superficie: {superficie_pais}, Continente: {continente_pais.capitalize()}")
 
+    # Agrego pais al archivo csv
+    agregar_pais(pais_nuevo)
 
   
-
 
 # OPCIÓN 2: Función para actualizar población y superficie de un país ----------
 def actualizar():
