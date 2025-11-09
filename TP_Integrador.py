@@ -282,8 +282,12 @@ def filtrar_superficie():
     
     # Valido los valores a ingresar
     while True:
-        sup_min = int(input('\nIngrese la superficie mínima del rango: '))
-        sup_max = int(input('\nIngrese la superficie máxima del rango: '))
+        try:
+            sup_min = int(input('\nIngrese la superficie mínima del rango: '))
+            sup_max = int(input('\nIngrese la superficie máxima del rango: '))
+        except ValueError:
+            print("Dato ingresado invalido. Intente de nuevo.")
+            continue
         
         if sup_min < 0 or sup_max < 0:
             print('Valores inválidos. Intente nuevamente ingresando números positivos.')
@@ -313,8 +317,12 @@ def filtrar_poblacion():
     
     # Valido los valores a ingresar
     while True:
-        p_min = int(input('\nIngrese la cantidad mínima de habitantes del rango: '))
-        p_max = int(input('\nIngrese la cantidad máxima de habitantes del rango: '))
+        try:
+            p_min = int(input('\nIngrese la cantidad mínima de habitantes del rango: '))
+            p_max = int(input('\nIngrese la cantidad máxima de habitantes del rango: '))
+        except ValueError:
+            print("Dato ingresado invalido. Intente de nuevo")
+            continue
         
         if p_min < 0 or p_max < 0:
             print('Valores inválidos. Intente nuevamente ingresando números positivos.')
@@ -368,18 +376,21 @@ def ordenamiento():
             #Ordenados por superficie.
             elif ordenar_por == "3":
                 eleccion = "superficie" #clave para acceder al diccionario.
-                asc_o_desc = input("\nDe forma Ascendente o Descendente? \n") 
+                while True:
+                    asc_o_desc = input("\nDe forma Ascendente o Descendente? \n") 
 
-                if asc_o_desc == "ascendente":
-                    tipo_orden = "de manera ascendente"
-                    paises_ordenados= sorted(paises, key=lambda pais: pais['superficie'])
+                    if asc_o_desc == "ascendente":
+                        tipo_orden = "de manera ascendente"
+                        paises_ordenados= sorted(paises, key=lambda pais: pais['superficie'])
+                        break
 
-                elif asc_o_desc == "descendente":
-                    tipo_orden = "de manera descendente"
-                    paises_ordenados = sorted(paises, key=lambda pais: pais['superficie'], reverse = True)
-
-                else:  #Si la respuesta es invalida.
-                    print("Respuesta invalida") #Si se escribe mal ascendente o descendente.
+                    elif asc_o_desc == "descendente":
+                        tipo_orden = "de manera descendente"
+                        paises_ordenados = sorted(paises, key=lambda pais: pais['superficie'], reverse = True)
+                        break
+                    else:  #Si la respuesta es invalida.
+                        print("Respuesta invalida. Intente de nuevo.") #Si se escribe mal ascendente o descendente.
+                        continue
             else:
                 print("Dato ingresado invalido.")
                 continue #vuelve al inicio del while
