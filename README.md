@@ -1,9 +1,9 @@
 # TPI_Programacion1_TUPaD_UTN
 Trabajo Practico Integrador de la asignatura Programación I - Tec Univ en Programación - UTN
 
-Alumnas:
-Paloma, Virginia - Comisión 10
-Salazar, Fiorella - Comisión 12
+Alumnas:  
+Paloma, Virginia - Comisión 10  
+Salazar, Fiorella - Comisión 12  
 
 Docente titular: 
   - Ariel Enferrel
