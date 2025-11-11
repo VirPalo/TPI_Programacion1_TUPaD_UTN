@@ -13,6 +13,8 @@ Docentes tutores:
 - Franco Gonzalez (comisión 12)
 
 Link al video en YouTube:
+- 
+- https://www.youtube.com/watch?v=cXfHv185gmg
 
 Link al repositorio en GitHub: https://github.com/VirPalo/TPI_Programacion1_TUPaD_UTN
 
